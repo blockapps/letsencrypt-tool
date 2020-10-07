@@ -1,5 +1,9 @@
 # BlockApps Letsencrypt Tool
 
+## 1.0.1
+
+- Readme enhancements
+
 ## 1.0.0
 
 - First release as the stand-alone tool (previously a part of blockapps-rest library)
