@@ -1,0 +1,8 @@
+# BlockApps Letsencrypt Tool
+
+## 1.0.0
+
+- First release as the stand-alone tool (previously a part of blockapps-rest library)
+- More parameters and flexibility to use on hosts with different configurations
+- Output the auto-generated crontab command
+- Readme changes
