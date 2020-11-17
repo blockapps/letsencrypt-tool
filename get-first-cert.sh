@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ -z "${HOST_NAME}" ]; then 
+if [ -z "${HOST_NAME}" ]; then
   echo "HOST_NAME var is not provided. Please enter the server hostname (e.g. example.com):"
   read -r HOST_NAME
 fi
@@ -19,18 +19,22 @@ else
   DRY_RUN_STRING=""
 fi
 
-echo "Continue with letsencrypt certificate request? Press Enter to confirm..."
-read -s -n 1 key
-if [[ $key != "" ]]; then
-  exit 0
+if [[ "${NON_INTERACTIVE}" = "true" ]]; then
+  echo "Running non-interactively"
+else
+  echo "Continue with letsencrypt certificate request? Press Enter to confirm..."
+  read -s -n 1 key
+  if [[ $key != "" ]]; then
+    exit 0
+  fi
 fi
 
-if [ -z "${ADMIN_EMAIL}" ]; then 
+if [ -z "${ADMIN_EMAIL}" ]; then
   echo "ADMIN_EMAIL var is not provided. Please enter the admin email address:"
   read -r ADMIN_EMAIL
 fi
 
-if [ -z "${DEST_PATHS}" ]; then 
+if [ -z "${DEST_PATHS}" ]; then
   echo "DEST_PATHS var is not provided. Please enter the destination directory paths, divided with comma (,):"
   read -r DEST_PATHS
 fi
@@ -67,7 +71,7 @@ else
   echo "Key path: ${key_path}"
   echo "(use sudo to access)"
   printf "\n\n"
-  
+
   echo "################################################"
   echo "Use these commands to copy to destination paths:"
   IFS=',' read -r -a DEST_PATHS_ARRAY <<< "${DEST_PATHS}"
@@ -77,15 +81,15 @@ else
     echo "sudo cp ${key_path} ${destination}/server.key"
   done
   printf "\n\n"
-  
+
   echo "Example command to copy to strato-getting-started:"
   echo "sudo cp ${cert_path} ~/strato-getting-started/ssl/certs/server.pem"
   echo "sudo cp ${key_path} ~/strato-getting-started/ssl/private/server.key"
   printf "\n\n"
-  
+
   echo "Crontab command for automatic cert renewal:"
   echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=~/strato-getting-started DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
   echo "Adjust the crontab schedule (min hour day month year), STRATOGS_DIR_PATH (optional) and DAPP_NGINX_CONTAINER_NAME if executing on the machine with DApp running (optional)."
-  
+
   echo "################################################"
 fi
