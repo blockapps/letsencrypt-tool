@@ -1,5 +1,9 @@
 # BlockApps Letsencrypt Tool
 
+## 1.0.2
+
+- Generate the root user friendly path for suggested strato-getting-started dir when finishing the get-first-cert.sh
+
 ## 1.0.1
 
 - Readme enhancements

@@ -12,10 +12,10 @@ sed 's/__HOST_NAME__/'"${HOST_NAME}"'/g' nginx-get-first-cert.tpl.conf > nginx-g
 echo "Nginx config for letsencrypt site was created."
 
 if [[ "${DRY_RUN}" = "true" ]]; then
-  echo "DRY_RUN is set to true - will do the dry run (staging) - for test or debugging."
+  echo "DRY_RUN is TRUE - will do the dry run (staging) - for test or debugging."
   DRY_RUN_STRING="--dry-run"
 else
-  echo "DRY_RUN is NOT set to true - will execute the PRODUCTION cert request (rate limit of 5 certs/week/host)"
+  echo "DRY_RUN is FALSE - will execute the PRODUCTION cert request (rate limit of 5 certs/week/host)"
   DRY_RUN_STRING=""
 fi
 
@@ -88,7 +88,7 @@ else
   printf "\n\n"
 
   echo "Crontab command for automatic cert renewal:"
-  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=~/strato-getting-started DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
+  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=$(cd ~ && pwd)/strato-getting-started DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
   echo "Adjust the crontab schedule (min hour day month year), STRATOGS_DIR_PATH (optional) and DAPP_NGINX_CONTAINER_NAME if executing on the machine with DApp running (optional)."
 
   echo "################################################"
