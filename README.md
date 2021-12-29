@@ -15,7 +15,7 @@ After that, when the webserver is already running, the certificate can be auto-r
 
 ```
 cd letsencrypt-tool
-sudo HOST_NAME=mydnsname.example.com ADMIN_EMAIL=admin@example.com DEST_PATHS='/home/ec2-user/letsencrypt-ssl,/my-ssls' ./get-first-cert.sh
+sudo HOST_NAME=mydnsname.example.com ADMIN_EMAIL=admin@example.com DEST_PATHS='/datadrive/letsencrypt-ssl' ./get-first-cert.sh
 ```
 - HOST_NAME - used for letsencrypt certbot to do the DNS name check
 - ADMIN_EMAIL - email used by letsencrypt to send notifications if auto-renewal wasn't successful (provide the real one)
@@ -36,7 +36,7 @@ Append the command line saved from the previous step.
 
 The line should look like the following example:
 ```
-0 6 2 */2 * (PATH=${PATH}:/usr/local/bin && cd /home/ec2-user/PATH/TO/letsencrypt-tool && HOST_NAME=mydnsname.example.com DEST_PATHS=/my/ssls STRATOGS_DIR_PATH=~/strato-getting-started DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> /PATH/TO/letsencrypt-tool/letsencrypt-tool-renew.log 2>&1)
+0 6 2 */2 * (PATH=${PATH}:/usr/local/bin && cd /PATH/TO/letsencrypt-tool && HOST_NAME=mydnsname.example.com DEST_PATHS=/datadrive/letsencrypt-ssl STRATOGS_DIR_PATH=/PATH/TO/strato-getting-started DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> /PATH/TO/letsencrypt-tool/letsencrypt-tool-renew.log 2>&1)
 ```
 (meaning this command will run at 6:00am UTC on the 2nd day of every 2 months)
 
