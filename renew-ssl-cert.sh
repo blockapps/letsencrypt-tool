@@ -35,6 +35,14 @@ else
   STRATOGS_DIR_PATH=''
 fi
 
+if [ -z "${STRATO_NGINX_CONTAINER_NAME}" ]; then 
+  echo "WARNING: STRATO_NGINX_CONTAINER_NAME var is not provided. Will NOT attempt to update the cert in STRATO nginx container."
+fi
+
+if [ -z "${VAULT_NGINX_CONTAINER_NAME}" ]; then 
+  echo "WARNING: VAULT_NGINX_CONTAINER_NAME var is not provided. Will NOT attempt to update the cert in Vault's nginx container."
+fi
+
 if [ -z "${DAPP_NGINX_CONTAINER_NAME}" ]; then 
   echo "WARNING: DAPP_NGINX_CONTAINER_NAME var is not provided. Will NOT attempt to update the cert in DApp's nginx container."
 fi
@@ -104,10 +112,16 @@ else
 
   echo "Copying key and cert to the live docker containers and reloading their configs..."
   set -x
-  sudo docker cp --follow-link ${cert_path} strato_nginx_1:/etc/ssl/certs/server.pem
-  sudo docker cp --follow-link ${key_path} strato_nginx_1:/etc/ssl/private/server.key
-  sudo docker exec strato_nginx_1 openresty -s reload
-   
+  if [ -n "${STRATO_NGINX_CONTAINER_NAME}" ]; then
+    sudo docker cp --follow-link ${cert_path} ${STRATO_NGINX_CONTAINER_NAME}:/etc/ssl/certs/server.pem
+    sudo docker cp --follow-link ${key_path} ${STRATO_NGINX_CONTAINER_NAME}:/etc/ssl/private/server.key
+    sudo docker exec ${STRATO_NGINX_CONTAINER_NAME} openresty -s reload
+  fi
+  if [ -n "${VAULT_NGINX_CONTAINER_NAME}" ]; then
+    sudo docker cp --follow-link ${cert_path} ${VAULT_NGINX_CONTAINER_NAME}:/etc/ssl/certs/server.pem
+    sudo docker cp --follow-link ${key_path} ${VAULT_NGINX_CONTAINER_NAME}:/etc/ssl/private/server.key
+    sudo docker exec ${VAULT_NGINX_CONTAINER_NAME} openresty -s reload
+  fi
   if [ -n "${DAPP_NGINX_CONTAINER_NAME}" ]; then
     sudo docker cp --follow-link ${cert_path} ${DAPP_NGINX_CONTAINER_NAME}:/etc/ssl/server.pem
     sudo docker cp --follow-link ${key_path} ${DAPP_NGINX_CONTAINER_NAME}:/etc/ssl/server.key
