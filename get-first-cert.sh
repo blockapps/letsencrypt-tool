@@ -87,7 +87,7 @@ else
   printf "\n\n"
 
   echo "Crontab command for automatic cert renewal:"
-  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=/datadrive/strato-getting-started DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
+  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=/datadrive/strato-getting-started STRATO_NGINX_CONTAINER_NAME=strato_nginx_1 VAULT_NGINX_CONTAINER_NAME=vault_nginx_1 DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
   echo "Adjust the crontab schedule (min hour day month year), STRATOGS_DIR_PATH (optional) and DAPP_NGINX_CONTAINER_NAME if executing on the machine with DApp running (optional)."
 
   echo "################################################"

@@ -1,5 +1,10 @@
 # BlockApps Letsencrypt Tool
 
+## 1.1.0
+
+- Added the support for STRATO Vault
+- Changed the certificate update in STRATO's nginx to be optional
+
 ## 1.0.3
 
 - Adjusted the default paths to start with /datadrive
