@@ -1,6 +1,19 @@
 #!/bin/bash
 set -e
 
+if ! docker-compose -v &> /dev/null
+then
+    echo -e "${Red}Error: docker-compose is required: https://docs.docker.com/compose/install/"
+    exit 2
+else
+  if ! docker compose version &> /dev/null
+  then
+    docker_compose="docker-compose"
+  else
+    docker_compose="docker compose"
+  fi
+fi
+
 if [ -z "${HOST_NAME}" ]; then 
   echo "HOST_NAME var is not provided. Please enter the server hostname (e.g. example.com):"
   read -r HOST_NAME
@@ -56,10 +69,10 @@ fi
 
 
 # Start letsencrypt nginx
-docker-compose up -d
+${docker_compose} up -d
 
 function cleanup {
-  docker-compose down
+  ${docker_compose} down
   if [ -n "${CONTAINER_USING_PORT_80}" ]; then
     docker start "${CONTAINER_USING_PORT_80}" || true
   fi

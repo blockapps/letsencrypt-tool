@@ -1,6 +1,21 @@
 #!/bin/bash
 set -e
 
+if ! docker-compose -v &> /dev/null
+then
+    echo -e "${Red}Error: docker-compose is required: https://docs.docker.com/compose/install/"
+    exit 2
+else
+  if ! docker compose version &> /dev/null
+  then
+    docker_compose="docker-compose"
+    CNAME_SEP="_"
+  else
+    docker_compose="docker compose"
+    CNAME_SEP="-"
+  fi
+fi
+
 if [ -z "${HOST_NAME}" ]; then
   echo "HOST_NAME var is not provided. Please enter the server hostname (e.g. example.com):"
   read -r HOST_NAME
@@ -43,10 +58,10 @@ if [[ ${DEST_PATHS} == *"~"* ]]; then
   exit 2
 fi
 
-docker-compose up -d
+${docker_compose} up -d
 
 function cleanup {
-  docker-compose down
+  ${docker_compose} down
 }
 
 trap cleanup EXIT
@@ -87,7 +102,7 @@ else
   printf "\n\n"
 
   echo "Crontab command for automatic cert renewal:"
-  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=/datadrive/strato-getting-started STRATO_NGINX_CONTAINER_NAME=strato_nginx_1 VAULT_NGINX_CONTAINER_NAME=vault_nginx_1 DAPP_NGINX_CONTAINER_NAME=myapp_nginx_1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
+  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=/datadrive/strato-getting-started STRATO_NGINX_CONTAINER_NAME=strato${CNAME_SEP}nginx${CNAME_SEP}1 VAULT_NGINX_CONTAINER_NAME=vault${CNAME_SEP}nginx${CNAME_SEP}1 DAPP_NGINX_CONTAINER_NAME=myapp${CNAME_SEP}nginx${CNAME_SEP}1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
   echo "Adjust the crontab schedule (min hour day month year), STRATOGS_DIR_PATH (optional) and DAPP_NGINX_CONTAINER_NAME if executing on the machine with DApp running (optional)."
 
   echo "################################################"

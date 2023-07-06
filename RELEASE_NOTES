@@ -1,5 +1,9 @@
 # BlockApps Letsencrypt Tool
 
+# 1.2.0
+
+- Support for Docker Compose V2 with backward compatibility for V1
+
 ## 1.1.0
 
 - Added the support for STRATO Vault
