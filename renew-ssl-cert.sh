@@ -1,16 +1,16 @@
 #!/bin/bash
 set -e
 
-if ! docker-compose -v &> /dev/null
+if docker compose version &> /dev/null
 then
-    echo -e "${Red}Error: docker-compose is required: https://docs.docker.com/compose/install/"
-    exit 2
+  docker_compose="docker compose"
 else
-  if ! docker compose version &> /dev/null
+  if docker-compose -v &> /dev/null
   then
     docker_compose="docker-compose"
   else
-    docker_compose="docker compose"
+    echo -e "${Red}Error: Docker Engine with Compose is required: https://docs.docker.com/engine/install/"
+    exit 2
   fi
 fi
 
