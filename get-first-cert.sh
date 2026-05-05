@@ -96,14 +96,10 @@ else
     echo "sudo cp ${key_path} ${destination}/server.key"
   done
   printf "\n\n"
-  echo "# Example command to copy to strato-getting-started:"
-  echo "sudo cp ${cert_path} /datadrive/strato-getting-started/ssl/certs/server.pem"
-  echo "sudo cp ${key_path} /datadrive/strato-getting-started/ssl/private/server.key"
-  printf "\n\n"
 
   echo "Crontab command for automatic cert renewal:"
-  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATOGS_DIR_PATH=/datadrive/strato-getting-started STRATO_NGINX_CONTAINER_NAME=strato${CNAME_SEP}nginx${CNAME_SEP}1 VAULT_NGINX_CONTAINER_NAME=vault${CNAME_SEP}nginx${CNAME_SEP}1 DAPP_NGINX_CONTAINER_NAME=myapp${CNAME_SEP}nginx${CNAME_SEP}1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
-  echo "Adjust the crontab schedule (min hour day month year), STRATOGS_DIR_PATH (optional) and DAPP_NGINX_CONTAINER_NAME if executing on the machine with DApp running (optional)."
+  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATO_NODE_DIR_PATH=/datadrive/strato-platform/mynode/secrets/ssl STRATO_NGINX_CONTAINER_NAME=strato${CNAME_SEP}nginx${CNAME_SEP}1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
+  echo "Adjust the crontab schedule (min hour day month year), STRATO_NODE_DIR_PATH (optional) and STRATO_NGINX_CONTAINER_NAME (optional)."
 
   echo "################################################"
 fi

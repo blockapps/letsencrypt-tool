@@ -1,5 +1,9 @@
 # BlockApps Letsencrypt Tool
 
+# 1.3.0
+
+- Updated for STRATO 16.14+
+
 # 1.2.0
 
 - Support for Docker Compose V2 with backward compatibility for V1
