@@ -15,7 +15,7 @@ After that, when the webserver is already running, the certificate can be auto-r
 
 ```
 cd letsencrypt-tool
-sudo HOST_NAME=mydnsname.example.com ADMIN_EMAIL=admin@example.com DEST_PATHS='/datadrive/letsencrypt-ssl' ./get-first-cert.sh
+sudo HOST_NAME=mydnsname.example.com ADMIN_EMAIL=admin@example.com DEST_PATHS='/datadrive/letsencrypt-ssl,/datadrive/strato-platform/mynode/secrets/ssl' ./get-first-cert.sh
 ```
 - HOST_NAME - used for letsencrypt certbot to do the DNS name check
 - ADMIN_EMAIL - email used by letsencrypt to send notifications if auto-renewal wasn't successful (provide the real one)
@@ -36,15 +36,12 @@ Append the command line saved from the previous step.
 
 The line should look like the following example:
 ```
-0 6 2 */2 * (PATH=${PATH}:/usr/local/bin && cd /PATH/TO/letsencrypt-tool && HOST_NAME=mydnsname.example.com DEST_PATHS=/datadrive/letsencrypt-ssl STRATOGS_DIR_PATH=/PATH/TO/strato-getting-started STRATO_NGINX_CONTAINER_NAME=strato-nginx-1 VAULT_NGINX_CONTAINER_NAME=vault-nginx-1 DAPP_NGINX_CONTAINER_NAME=myapp-nginx-1 ./renew-ssl-cert.sh >> /PATH/TO/letsencrypt-tool/letsencrypt-tool-renew.log 2>&1)
+0 6 2 */2 * (PATH=${PATH}:/usr/local/bin && cd /PATH/TO/letsencrypt-tool && HOST_NAME=mydnsname.example.com DEST_PATHS='/datadrive/letsencrypt-ssl,/datadrive/strato-platform/mynode/secrets/ssl' STRATO_NGINX_CONTAINER_NAME=strato-nginx-1 ./renew-ssl-cert.sh >> /PATH/TO/letsencrypt-tool/letsencrypt-tool-renew.log 2>&1)
 ```
 (meaning this command will run at 6:00am UTC on the 2nd day of every 2 months)
 
 In addition to configuration vars used in first step we have 2 more in the command above:
-- STRATOGS_DIR_PATH (optional) - the directory path of strato-getting-started to replace .pem and .key files under it. Cannot be provided in DEST_PATHS as it uses the additional subdirectory structure. Useful when executing on hosts with manually deployed STRATO.
 - STRATO_NGINX_CONTAINER_NAME (optional) - the name of STRATO node's nginx container to replace .pem and .key files in it and reload nginx/openresty config. Used when executing on hosts with STRATO Node running on it.
-- VAULT_NGINX_CONTAINER_NAME (optional) - the name of STRATO Vault's nginx container to replace .pem and .key files in it and reload nginx/openresty config. Used when executing on hosts with STRATO Vault running on it.
-- DAPP_NGINX_CONTAINER_NAME (optional) - the name of the application's nginx container to replace .pem and .key files in it and reload nginx config. Used when executing on hosts with STRATO Application running on it.
 
 It is **strongly recommended** testing the crontab job by **temporary** adjusting schedule to execute in the nearest minutes and checking the resulting log file.
 Don't forget to revert the temporary crontab changes after.

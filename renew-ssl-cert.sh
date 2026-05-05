@@ -36,13 +36,6 @@ if [[ ${DEST_PATHS} == *"~"* ]]; then
   exit 2
 fi
 
-if [[ -n "${STRATO_NODE_DIR_PATH}" ]]; then
-  echo "STRATO_NODE_DIR_PATH is set to '${STRATO_NODE_DIR_PATH}'"
-  if [[ ! -d "${STRATO_NODE_DIR_PATH}" ]]; then
-    echo "Error: Directory ${STRATO_NODE_DIR_PATH} not found. Skipping."
-  fi
-fi
-
 if [ -z "${STRATO_NGINX_CONTAINER_NAME}" ]; then 
   echo "WARNING: STRATO_NGINX_CONTAINER_NAME var is not provided. Will NOT attempt to update the cert in STRATO nginx container."
 fi
@@ -101,13 +94,11 @@ else
   done
   printf "\n\n"
   
-  if [[ -n "${STRATO_NODE_DIR_PATH}" ]]; then
-    echo "Copying key and cert to the STRATO node's ssl dir and reloading nginx config"
-    set -x
-    sudo cp ${cert_path} ${STRATO_NODE_DIR_PATH}/secrets/ssl/server.pem
-    sudo cp ${key_path} ${STRATO_NODE_DIR_PATH}/secrets/ssl/server.key
-    sudo docker exec ${STRATO_NGINX_CONTAINER_NAME} openresty -s reload || true
-    set +x
+  if docker ps --format '{{.Names}}' | grep -q "^${STRATO_NGINX_CONTAINER_NAME}$"; then
+    echo "STRATO nginx container '${STRATO_NGINX_CONTAINER_NAME}' is running, executing openresty reload..."
+    sudo docker exec ${STRATO_NGINX_CONTAINER_NAME} openresty -s reload
+  else
+    echo "STRATO nginx container '${STRATO_NGINX_CONTAINER_NAME}' is not running, SKIPPING openresty reload."
   fi
 
 

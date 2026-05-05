@@ -98,8 +98,8 @@ else
   printf "\n\n"
 
   echo "Crontab command for automatic cert renewal:"
-  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATO_NODE_DIR_PATH=/datadrive/strato-platform/mynode STRATO_NGINX_CONTAINER_NAME=strato${CNAME_SEP}nginx${CNAME_SEP}1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
-  echo "Adjust the crontab schedule (min hour day month year), STRATO_NODE_DIR_PATH (optional) and STRATO_NGINX_CONTAINER_NAME (optional)."
+  echo "0 5 1 */2 * (PATH=\${PATH}:/usr/local/bin && cd $(pwd) && HOST_NAME=${HOST_NAME} DEST_PATHS=${DEST_PATHS} STRATO_NGINX_CONTAINER_NAME=strato${CNAME_SEP}nginx${CNAME_SEP}1 ./renew-ssl-cert.sh >> $(pwd)/letsencrypt-tool-renew.log 2>&1)"
+  echo "Adjust the crontab schedule (min hour day month year), STRATO_NGINX_CONTAINER_NAME (optional)."
 
   echo "################################################"
 fi
