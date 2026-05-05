@@ -88,8 +88,8 @@ else
   do
     echo "Destination path: ${destination}"
     set -x
-    sudo cp ${cert_path} ${destination}/server.pem
-    sudo cp ${key_path} ${destination}/server.key
+    sudo cp ${cert_path} ${destination}/server.pem || true
+    sudo cp ${key_path} ${destination}/server.key || true
     set +x
   done
   printf "\n\n"
